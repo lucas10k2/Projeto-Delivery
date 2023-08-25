@@ -27,14 +27,7 @@ public class ProdutoController {
 
     @GetMapping("/produto")
     public ResponseEntity<List<ProdutoModels>> getAllProduto(){
-        List<ProdutoModels> produtoList = produtoRepositorio.findAll();
-        if(!produtoList.isEmpty()) {
-            for(ProdutoModels produto : produtoList) {
-                UUID id = produto.getIdProduto();
-                produto.add(linkTo(methodOn(ProdutoController.class).getOneProduto(id)).withSelfRel());
-            }
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(produtoList);
+        return ResponseEntity.status(HttpStatus.OK).body(produtoRepositorio.findAll());
     }
 
     @GetMapping("/produto/{id}")
@@ -43,7 +36,6 @@ public class ProdutoController {
         if(produto0.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found.");
         }
-        produto0.get().add(linkTo(methodOn(ProdutoController.class).getAllProduto()).withRel("Products List"));
         return ResponseEntity.status(HttpStatus.OK).body(produto0.get());
     }
 
